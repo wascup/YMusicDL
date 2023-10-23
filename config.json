@@ -1,0 +1,26 @@
+{
+    "backendDownloader": "yt-dlp",
+    "downloadArt": true,
+    "songPath": "songs//",
+    "excludedWords": [
+        "(Official Music Video)",
+        "(Official Video)",
+        "(Music Video)",
+        "(Official HD Music Video)"
+    ],
+    "mp3gainNormalizeAudio": true,
+    "mp3gainDB": 10,
+    "experimentalSearchTerms": true,
+    "experimentalTitler": true,
+    "experimentalTitlerRemover": [
+        "(Official Music Video)",
+        "(Official Video)",
+        "(Music Video)",
+        "(Official HD Music Video)",
+        "(Official Audio)",
+        "(Audio)",
+        "(HQ Audio)"
+    ]
+
+
+}

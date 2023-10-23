@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <% var query; %>
+    <% if (query) { %>
+    <title><%= query %> - YMUSICDL</title>
+    <% } else { %>
+    <title>YMUSICDL</title>
+    <% } %>
+</head>
+
+<body>
+    <div id="songModal" class="songModal">
+        <div class="mainModal">
+            <h1 id="songTitleHeader">{SONGTITLE}</h1>
+            <img src="img/placeholderArt.png" id="songAlbumArt" alt="Album Art" class="albumArt"><br>
+            <button class="changeArt" id="changeArt">Change</button><br>
+            <label for="songTitle">Title </label>
+            <input type="text" name="songTitle" id="songTitle"><br>
+            <label for="songArtist">Artist </label>
+            <input type="text" name="songArtist" id="songArtist"><br>
+            <label for="songAlbum">Album </label>
+            <input type="text" name="songAlbum" id="songAlbum"><br>
+            <label for="songYear">Year </label>
+            <input type="text" name="songYear" id="songYear"><br>
+
+
+            <button onclick="closeModal()" class="modalButtons" id="discardButton">Discard</button>
+            <button class="modalButtons" id="saveButton">Save + Close</button>
+        </div>
+
+    </div>
+    <div class="sidebar">
+        <h1>YMusicDL</h1>
+        <input type="text" name="songName" id="songName" value="<%= query %>">
+        <button id="searchButton" onclick="searchSong(document.getElementById('songName').value)">Search</button>
+        <button id="settingsButton" onclick="openSettingsModal()">Settings</button>
+    </div>
+    <div class="songslist">
+        <% var results; %>
+
+        <% results.forEach(song => { %>
+        <div class="songResult">
+
+            <button class="downloadbutton" id="<%= song.url %>"
+                onclick="downloadSong(this,`<%= song.title %>`,`<%= song.url %>`)">DOWNLOAD</button>
+            <div class="square-container">
+                <img src="<%= song.albumArt %>" alt="Album Art" class="songTitle square-image">
+            </div>
+            <span class="songTitle"><%= song.title %></span>
+            <span> - </span>
+            <span class="songArtist"><%= song.artist.replace(" - Topic","") %></span><br>
+            <span class="songYear"><%= song.year %></span>
+        </div>
+        <% }) %>
+    </div>
+</body>
+
+</html>

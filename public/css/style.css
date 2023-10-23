@@ -1,0 +1,227 @@
+body {
+    background-color: #181818;
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.sidebar {
+    background-color: #111111;
+    max-width: 25%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    padding: 1em;
+    text-align: center;
+}
+
+.sidebar input[type=text] {
+    padding: 5px;
+    border: 0;
+    border-radius: 12px;
+    font-size: large;
+    width: 97%;
+}
+
+.sidebar input[type=text]:focus {
+    border: 0;
+}
+
+.sidebar #searchButton {
+    background-color: #1db954;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: .5em;
+}
+.sidebar #settingsButton {
+    position: absolute;
+    bottom: 10px;
+    left: 10%;
+    background-color: #0c7bd1;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px;
+    width: 80%;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: .5em;
+}
+
+.songslist {
+    -webkit-animation: fadein 2s;
+    -moz-animation: fadein 2s;
+    -ms-animation: fadein 2s;
+    -o-animation: fadein 2s;
+    animation: fadein 2s;
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    left: 27%;
+    padding: 1em;
+
+}
+
+.songResult {
+    background-color: #141414;
+    padding: 1em;
+    border-radius: 12px;
+    margin-bottom: 1em;
+}
+
+.songResult .songTitle {
+    color: lightcoral;
+}
+
+.songResult .songArtist {
+    color: lightgreen;
+}
+
+.songResult .downloadbutton {
+    float: right;
+    background-color: #1db954;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.songResult .editButton {
+    float: right;
+    background-color: #0c7bd1;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.songResult img {
+    max-width: 5em;
+    max-height: 5em;
+    border-radius: 12px;
+    vertical-align: middle;
+}
+
+.square-container {
+    position: relative;
+    width: 10%;
+    padding-top: 10%;
+    overflow: hidden;
+}
+
+.square-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.songModal {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgb(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none;
+
+}
+
+/* fade in animation */
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.songModal .mainModal {
+    transition: 0.5s;
+    position: fixed;
+    background: #131313;
+    width: 50%;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 12px;
+    padding: 1em;
+    text-align: center;
+}
+
+.songModal .mainModal input[type=text] {
+    padding: 5px;
+    border: 0;
+    border-radius: 12px;
+    font-size: large;
+    width: 97%;
+    margin-bottom: 10px;
+
+
+}
+
+.songModal .mainModal .modalButtons {
+    float: right;
+    background-color: #1db954;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-left: 5px;
+
+}
+
+.songModal .mainModal .changeArt {
+    background-color: #1db954;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-left: 5px;
+
+}
+
+.songModal .mainModal .albumArt {
+
+    max-width: 10em;
+    max-height: 10em;
+    border-radius: 12px;
+    vertical-align: middle;
+    margin-bottom: 10px;
+
+}
