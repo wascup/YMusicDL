@@ -11,10 +11,6 @@ window.addEventListener("load", (event) => {
         });
 });
 
-window.bridge.sendSettings((event, settings) => {
-    console.log(settings);
-});
-
 function searchSong(songQuery) {
     //change windwo location to /?songName
     window.location.href = `/?songName=${songQuery}`;
@@ -142,6 +138,7 @@ function openSettingsModal() {
             socket.on("settingsMessage", (message)=> {
                 settingsMessage.innerText = message
                 settingsMessage.style.display = "block"
+                settingsMessage.style.color = "#1db954"
             })
         }
     })

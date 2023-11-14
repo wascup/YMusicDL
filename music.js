@@ -117,7 +117,7 @@ io.on("connect", (socket) => {
 
     socket.on("changeCurrentSongPath", (path)=> {
         changeCurrentSongPath(path)
-        socket.emit("settingsMessage", "You must restart YMusicDL for the settings to fully change")
+        socket.emit("settingsMessage", "Settings Changed Successfully")
     })
 });
 
@@ -273,6 +273,7 @@ async function getSongData(fileLocation) {
 
 function changeCurrentSongPath(path) {
     settings.songDownloadPath = path
+    songPath = Path.resolve(__dirname, settings.songDownloadPath)
     fs.writeFileSync("./config.json", JSON.stringify(settings, null, 4))
 }
 
