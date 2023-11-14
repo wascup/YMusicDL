@@ -34,8 +34,20 @@
             <button onclick="closeModal()" class="modalButtons" id="discardButton">Discard</button>
             <button class="modalButtons" id="saveButton">Save + Close</button>
         </div>
-
     </div>
+
+    <div style="display: none;" class="settingsModal">
+        <div class="mainModal">
+            <h4 style="display: none;" class="center" id="settingsMessage">{{text}}</h4>
+            <h2 class="center">Settings</h2>
+            <form>
+                <label for="songDownloadPath">Song Download Path:</label>
+                <input type="text" id="songDownloadPath" name="songDownloadPath" value="{{songDownloadPath}}">
+                <button type="button" id="settingsSaveButton">Save</button>
+            </form>
+        </div>
+    </div>
+
     <div class="sidebar">
         <h1>YMusicDL</h1>
         <input type="text" name="songName" id="songName" value="<%= query %>">

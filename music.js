@@ -1,10 +1,7 @@
 const express = require("express");
 const webviewApp = express();
-const port = 3000;
-const {
-    app,
-    BrowserWindow
-} = require("electron");
+const port = 9239;
+const { app, BrowserWindow } = require("electron");
 const NodeID3 = require("node-id3");
 const bodyParser = require("body-parser");
 const ytsearch = require("yt-search");
@@ -12,10 +9,10 @@ const fs = require("fs");
 const Path = require("path");
 const http = require("http");
 const server = http.createServer(webviewApp);
-const {
-    Server
-} = require("socket.io");
+const { Server } = require("socket.io");
 const io = new Server(server);
+const settings = require("./config.json")
+
 var debug = false;
 
 if (!debug) {
@@ -113,6 +110,15 @@ io.on("connect", (socket) => {
 
         NodeID3.update(song, data.fileLocation);
     });
+    // settings
+    socket.on("showCurrentSongPath", ()=> {
+        socket.emit("currentSongPath", settings.songDownloadPath)
+    })
+
+    socket.on("changeCurrentSongPath", (path)=> {
+        changeCurrentSongPath(path)
+        socket.emit("settingsMessage", "You must restart YMusicDL for the settings to fully change")
+    })
 });
 
 //////////////////////
@@ -157,6 +163,7 @@ function searchYoutube(query, callback) {
 }
 
 const util = require("util");
+const { config } = require("process");
 const execFile = util.promisify(require("child_process").execFile);
 
 async function downloadVideo(url,title) {
@@ -264,7 +271,10 @@ async function getSongData(fileLocation) {
     return songData;
 }
 
-
+function changeCurrentSongPath(path) {
+    settings.songDownloadPath = path
+    fs.writeFileSync("./config.json", JSON.stringify(settings, null, 4))
+}
 
 async function base64toIMG(base64, outputPath) {
     return new Promise((resolve, reject) => {
@@ -287,7 +297,7 @@ function getRandomInt(max) {
 
 
 var backendDownloader = "yt-dlp";
-var songPath = Path.resolve(__dirname, "songs/");
+var songPath = Path.resolve(__dirname, settings.songDownloadPath);
 var excludedWords = [];
 var mp3gainDB = 85;
 var downloadArt = true;
@@ -300,7 +310,7 @@ readConfig();
 
 function readConfig() {
     var config = JSON.parse(fs.readFileSync("config.json"));
-    songPath = Path.resolve(__dirname, config.songPath);
+    songPath = Path.resolve(__dirname, config.songDownloadPath);
     backendDownloader = config.backendDownloader;
     excludedWords = config.excludedWords;
     mp3gainDB = config.mp3gainDB;
