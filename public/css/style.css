@@ -273,3 +273,15 @@ body {
     cursor: pointer;
 }
 
+.infoDiv {
+    display: none;
+    border-radius: 20px;
+    padding: 5px;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #1db954;
+    z-index: 99999;
+}

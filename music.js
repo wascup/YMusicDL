@@ -11,7 +11,7 @@ const http = require("http");
 const server = http.createServer(webviewApp);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const settings = require("./config.json")
+var settings = require("./config.json")
 
 var debug = false;
 
@@ -20,7 +20,7 @@ if (!debug) {
         const win = new BrowserWindow({
             width: 1000,
             height: 800,
-            title: "Music Downloader",
+            title: "YMusicDL",
             autoHideMenuBar: true,
             resizable: false,
         });
@@ -110,14 +110,20 @@ io.on("connect", (socket) => {
 
         NodeID3.update(song, data.fileLocation);
     });
+
+
+
     // settings
-    socket.on("showCurrentSongPath", ()=> {
-        socket.emit("currentSongPath", settings.songDownloadPath)
+    socket.on("getSettings", () => {
+        socket.emit("receivedSettings", settings)
     })
 
-    socket.on("changeCurrentSongPath", (path)=> {
-        changeCurrentSongPath(path)
-        socket.emit("settingsMessage", "Settings Changed Successfully")
+
+    socket.on("saveSettings", (data)=> {
+        settings = data;
+        writeConfig((result)=> {
+            socket.emit("savedSettings",result)
+        })
     })
 });
 
@@ -163,13 +169,12 @@ function searchYoutube(query, callback) {
 }
 
 const util = require("util");
-const { config } = require("process");
 const execFile = util.promisify(require("child_process").execFile);
 
 async function downloadVideo(url,title) {
-    var outputFilePath = `${songPath}\\${title}.mp3`;
+    var outputFilePath = `${songDownloadPath}//${title}.mp3`;
     if(fs.existsSync(outputFilePath)){
-        outputFilePath = `${songPath}\\${title}(${getRandomInt(1000)}).mp3`;
+        outputFilePath = `${songDownloadPath}//${title}(${getRandomInt(1000)}).mp3`;
     }
 
     const parameters = [
@@ -274,7 +279,7 @@ async function getSongData(fileLocation) {
 function changeCurrentSongPath(path) {
     settings.songDownloadPath = path
     songPath = Path.resolve(__dirname, settings.songDownloadPath)
-    fs.writeFileSync("./config.json", JSON.stringify(settings, null, 4))
+    writeConfig()
 }
 
 async function base64toIMG(base64, outputPath) {
@@ -297,27 +302,21 @@ function getRandomInt(max) {
 }
 
 
-var backendDownloader = "yt-dlp";
-var songPath = Path.resolve(__dirname, settings.songDownloadPath);
-var excludedWords = [];
-var mp3gainDB = 85;
-var downloadArt = true;
-var mp3gainNormalizeAudio = true;
-var experimentalSearchTerms = true;
-var experimentalTitler = false;
-var experimentalTitlerRemover = [];
+var backendDownloader = settings.backendDownloader;
+var songDownloadPath = Path.resolve(__dirname, settings.songDownloadPath);
+var excludedWords = settings.excludedWords;
+var mp3gainDB = settings.mp3gainDB;
+var downloadArt = settings.downloadArt;
+var mp3gainNormalizeAudio = settings.mp3gainNormalizeAudio;
+var experimentalSearchTerms = settings.experimentalSearchTerms;
+var experimentalTitler = settings.experimentalTitler;
+var experimentalTitlerRemover = settings.experimentalTitlerRemover;
 
-readConfig();
-
-function readConfig() {
-    var config = JSON.parse(fs.readFileSync("config.json"));
-    songPath = Path.resolve(__dirname, config.songDownloadPath);
-    backendDownloader = config.backendDownloader;
-    excludedWords = config.excludedWords;
-    mp3gainDB = config.mp3gainDB;
-    downloadArt = config.downloadArt;
-    mp3gainNormalizeAudio = config.mp3gainNormalizeAudio;
-    experimentalSearchTerms = config.experimentalSearchTerms;
-    experimentalTitler = config.experimentalTitler;
-    experimentalTitlerRemover = config.experimentalTitlerRemover;
+function writeConfig(callback) {
+    try {
+        fs.writeFileSync("./config.json", JSON.stringify(settings, null, 4));
+        callback(1,null)
+    } catch(e) {
+        callback(e,null)
+    }
 }

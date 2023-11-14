@@ -16,6 +16,9 @@
 </head>
 
 <body>
+    <div class="infoDiv" id="infoDiv">
+        <p id="infoMessage">MESSAGE</p>
+    </div>
     <div id="songModal" class="songModal">
         <div class="mainModal">
             <h1 id="songTitleHeader">{SONGTITLE}</h1>
@@ -36,13 +39,16 @@
         </div>
     </div>
 
-    <div style="display: none;" class="settingsModal">
+    <div style="display: none;" id="settingsModal" class="settingsModal">
         <div class="mainModal">
-            <h4 style="display: none;" class="center" id="settingsMessage">{{text}}</h4>
             <h2 class="center">Settings</h2>
             <form>
                 <label for="songDownloadPath">Song Download Path:</label>
-                <input type="text" id="songDownloadPath" name="songDownloadPath" value="{{songDownloadPath}}">
+                <input type="text" id="txt_songDownloadPath" name="txt_songDownloadPath" value="{{songDownloadPath}}">
+                <label for="cb_normalizeAudio">Normalize Audio Levels:</label>
+                <input type="checkbox" id="cb_normalizeAudio" name="cb_normalizeAudio" value="{{audioBoolean}}"><br>
+                <label for="nb_normalizeAudioDB">Audio Level:</label>
+                <input type="number" id="nb_normalizeAudioDB" name="nb_normalizeAudioDB" value="{{audioNumber}}"><br>
                 <button type="button" id="settingsSaveButton">Save</button>
             </form>
         </div>
