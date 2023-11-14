@@ -11,6 +11,12 @@ window.addEventListener("load", (event) => {
         });
 });
 
+
+
+function openLink(url) {
+    socket.emit("openLink",url);
+}
+
 function searchSong(songQuery) {
     //change windwo location to /?songName
     window.location.href = `/?songName=${songQuery}`;

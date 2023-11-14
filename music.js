@@ -111,6 +111,16 @@ io.on("connect", (socket) => {
         NodeID3.update(song, data.fileLocation);
     });
 
+    socket.on("openLink",(link) => {
+        var OS = process.platform;
+        if(OS == 'win32') {
+            var command = "start \"" + link + "\"";
+        } else {
+            var command = "xdg-open \"" + link + "\"";
+        }
+        require("child_process").exec(command)
+    });
+
 
 
     // settings
@@ -276,11 +286,7 @@ async function getSongData(fileLocation) {
     return songData;
 }
 
-function changeCurrentSongPath(path) {
-    settings.songDownloadPath = path
-    songPath = Path.resolve(__dirname, settings.songDownloadPath)
-    writeConfig()
-}
+
 
 async function base64toIMG(base64, outputPath) {
     return new Promise((resolve, reject) => {

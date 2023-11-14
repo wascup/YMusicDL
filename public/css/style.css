@@ -88,6 +88,7 @@ body {
     margin-bottom: 1em;
 }
 
+
 .songResult .songTitle {
     color: lightcoral;
 }
@@ -131,6 +132,10 @@ body {
     width: 10%;
     padding-top: 10%;
     overflow: hidden;
+}
+
+.square-container:hover {
+    cursor: pointer;
 }
 
 .square-image {
@@ -285,3 +290,5 @@ body {
     background-color: #1db954;
     z-index: 99999;
 }
+
+

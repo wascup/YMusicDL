@@ -69,7 +69,7 @@
             <button class="downloadbutton" id="<%= song.url %>"
                 onclick="downloadSong(this,`<%= song.title %>`,`<%= song.url %>`)">DOWNLOAD</button>
             <div class="square-container">
-                <img src="<%= song.albumArt %>" alt="Album Art" class="songTitle square-image">
+                <img onclick="openLink('<%= song.url %>')" src="<%= song.albumArt %>" alt="Album Art" class="songTitle square-image">
             </div>
             <span class="songTitle"><%= song.title %></span>
             <span> - </span>
