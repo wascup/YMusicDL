@@ -15,7 +15,7 @@ function searchSong(songQuery) {
     //change windwo location to /?songName
     window.location.href = `/?songName=${songQuery}`;
     document.getElementById("searchButton").disabled = true;
-    document.getElementById("searchButton").innerHTML = "Searching...";
+    document.getElementById("searchButton").innerHTML = "Searching..."
 }
 
 function downloadSong(caller, songtitle, songurl) {
@@ -117,6 +117,32 @@ function showModal(Song, fileLocation) {
     };
 
     modal.style.display = "block";
+}
+
+function openSettingsModal() {
+    var settings = document.getElementsByClassName("settingsModal")[0]
+    var songsList = document.getElementsByClassName("songslist")[0]
+    var input = document.getElementById("songDownloadPath")
+    var saveButton = document.getElementById("settingsSaveButton")
+    var settingsMessage = document.getElementById("settingsMessage")
+
+    socket.emit("showCurrentSongPath")
+    socket.on("currentSongPath", (path)=> {
+        settings.style.display = "block"
+        songsList.style.display = "none"
+
+        input.value = path
+
+        saveButton.onclick = function() {
+            socket.emit("changeCurrentSongPath", input.value)
+            socket.on("settingsMessage", (message)=> {
+                settingsMessage.innerText = message
+                settingsMessage.style.display = "block"
+                settingsMessage.style.color = "#1db954"
+            })
+        }
+    })
+
 }
 
 function closeModal() {

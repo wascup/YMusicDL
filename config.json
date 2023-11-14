@@ -1,7 +1,7 @@
 {
     "backendDownloader": "yt-dlp",
     "downloadArt": true,
-    "songPath": "songs//",
+    "songDownloadPath": "songs//",
     "excludedWords": [
         "(Official Music Video)",
         "(Official Video)",
@@ -21,6 +21,4 @@
         "(Audio)",
         "(HQ Audio)"
     ]
-
-
 }
