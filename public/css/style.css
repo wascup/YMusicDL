@@ -260,6 +260,23 @@ body {
     border: 0;
 }
 
+.settingsModal .mainModal input[type=number] {
+    padding: 5px;
+    border: 0;
+    border-radius: 12px;
+    font-size: large;
+    width: 97%;
+}
+
+.settingsModal .mainModal label {
+    padding-top: 1rem;
+}
+
+.settingsModal .mainModal input[type=number]:focus {
+    border: 0;
+}
+
+
 .settingsModal .mainModal #settingsSaveButton {
     float: right;
     background-color: #1db954;
