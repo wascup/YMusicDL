@@ -18,7 +18,7 @@ const {
 const io = new Server(server);
 var settings = require("./config.json")
 
-var debug = true;
+var debug = false;
 
 if (!debug) {
     const createWindow = () => {
@@ -351,7 +351,7 @@ async function getAllSongs(query, callback) {
                                 title: song.title,
                                 artist: song.artist,
                                 album: song.album,
-                                year: song.year,
+                                year: getSongYear(song),
                                 albumArt: song.image.imageBuffer.toString("base64"),
                                 fileLocation: songDownloadPath + "\\" + file,
                             });
@@ -361,7 +361,7 @@ async function getAllSongs(query, callback) {
                                     title: song.title,
                                     artist: song.artist,
                                     album: song.album,
-                                    year: song.year,
+                                    year: getSongYear(song),
                                     albumArt: song.image.imageBuffer.toString("base64"),
                                     fileLocation: songDownloadPath + "\\" + file,
                                 });
@@ -378,6 +378,29 @@ async function getAllSongs(query, callback) {
     });
 }
 
+
+function getSongYear(song) {
+    if (song.originalReleaseTime) {
+        return song.originalReleaseTime.substring(0, 4);
+    }
+    if (song.recordingTime) {
+        return song.recordingTime.substring(0, 4);
+    }
+    if (song.userDefinedText) {
+        const year = song.userDefinedText.find(
+            (x) => x.description === "year"
+        ) ?.value;
+        if (year) {
+            return year;
+        }
+    }
+
+    if (song.year) {
+        return song.year;
+    }
+
+    return "";
+}
 
 var backendDownloader = settings.backendDownloader;
 var songDownloadPath = Path.resolve(__dirname, settings.songDownloadPath);

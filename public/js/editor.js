@@ -3,10 +3,10 @@ var songs = [];
 
 socket.on("downloadedSongs", (data) => {
     songs = data;
-    console.log(songs);
     songs.forEach(function (song) {
         addSong(song);
     });
+
 });
 
 var searchBox = document.getElementById("songName");
@@ -15,6 +15,7 @@ var songResults = document.getElementById("songsList");
 
 
 window.onload = function () {
+    clearSongs();
     socket.emit("getSongs");
 };
 
@@ -68,7 +69,6 @@ function addSong(song) {
     songResults.appendChild(songDiv);
     
 }
-
 
 function liveUpdateEdit(song) {
     var songDiv = document.getElementById("FILE_" + song.fileLocation);

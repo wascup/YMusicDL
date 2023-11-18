@@ -132,6 +132,7 @@ body {
 
 .songResult .songTitle {
     color: lightcoral;
+    font-weight: bold;
 }
 
 .songResult .songArtist {
