@@ -50,6 +50,10 @@ body {
     cursor: pointer;
     margin-top: .5em;
 }
+.sidebar #searchButton:hover {
+    background-color: #15873d;
+
+}
 .sidebar #settingsButton {
     position: absolute;
     bottom: 10px;
@@ -63,6 +67,43 @@ body {
     font-weight: bold;
     cursor: pointer;
     margin-top: .5em;
+}
+.sidebar #settingsButton:hover {
+    background-color: #085895;
+}
+.sidebar #modeButton {
+    position: absolute;
+    bottom: 50px;
+    left: 10%;
+    background-color: #0c7bd1;
+    border: 0;
+    border-radius: 12px;
+    padding: 10px;
+    width: 80%;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: .5em;
+}
+
+.sidebar #modeButton:hover {
+    background-color: #085895;
+}
+
+.backButton {
+    text-decoration: none;
+    background-color: #0c7bd1;
+    border: 0;
+    border-radius: 12px;
+    padding: 5px;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: .5em;
+}
+.backButton:hover {
+    background-color: #085895;
 }
 
 .songslist {
@@ -309,3 +350,15 @@ body {
 }
 
 
+/* custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #27272700;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0c7bd1;
+}

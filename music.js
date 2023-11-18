@@ -1,7 +1,10 @@
 const express = require("express");
 const webviewApp = express();
 const port = 9239;
-const { app, BrowserWindow } = require("electron");
+const {
+    app,
+    BrowserWindow
+} = require("electron");
 const NodeID3 = require("node-id3");
 const bodyParser = require("body-parser");
 const ytsearch = require("yt-search");
@@ -9,11 +12,13 @@ const fs = require("fs");
 const Path = require("path");
 const http = require("http");
 const server = http.createServer(webviewApp);
-const { Server } = require("socket.io");
+const {
+    Server
+} = require("socket.io");
 const io = new Server(server);
 var settings = require("./config.json")
 
-var debug = false;
+var debug = true;
 
 if (!debug) {
     const createWindow = () => {
@@ -66,6 +71,10 @@ webviewApp.get("/", (req, res) => {
     }
 });
 
+webviewApp.get("/songs", (req, res) => {
+    res.render("songs");
+});
+
 server.listen(port, () => console.log(`http://localhost:${port}`));
 
 ///////////////
@@ -111,16 +120,31 @@ io.on("connect", (socket) => {
         NodeID3.update(song, data.fileLocation);
     });
 
-    socket.on("openLink",(link) => {
+    socket.on("openLink", (link) => {
         var OS = process.platform;
-        if(OS == 'win32') {
+        if (OS == 'win32') {
             var command = "start \"" + link + "\"";
         } else {
             var command = "xdg-open \"" + link + "\"";
         }
         require("child_process").exec(command)
     });
+    socket.on("openSong", (Location) => {
+        var OS = process.platform;
+        if (OS == 'win32') {
+            var command = "\"" + Location + "\"";
+        } else {
+            var command = "xdg-open \"" + link + "\"";
+        }
+        require("child_process").exec(command)
+    });
 
+
+    socket.on("getSongs", (query) => {
+        getAllSongs(query,(songs) => {
+            socket.emit("downloadedSongs", songs);
+        });
+    });
 
 
     // settings
@@ -129,10 +153,11 @@ io.on("connect", (socket) => {
     })
 
 
-    socket.on("saveSettings", (data)=> {
+    socket.on("saveSettings", (data) => {
         settings = data;
-        writeConfig((result)=> {
-            socket.emit("savedSettings",result)
+        console.log(settings.songDownloadPath)
+        writeConfig((result) => {
+            socket.emit("savedSettings", result)
         })
     })
 });
@@ -143,7 +168,7 @@ io.on("connect", (socket) => {
 
 function searchYoutube(query, callback) {
     var searchTerms = query;
-    if(experimentalSearchTerms) {
+    if (experimentalSearchTerms) {
         searchTerms += ' "topic"'
     }
 
@@ -181,9 +206,9 @@ function searchYoutube(query, callback) {
 const util = require("util");
 const execFile = util.promisify(require("child_process").execFile);
 
-async function downloadVideo(url,title) {
+async function downloadVideo(url, title) {
     var outputFilePath = `${songDownloadPath}//${title}.mp3`;
-    if(fs.existsSync(outputFilePath)){
+    if (fs.existsSync(outputFilePath)) {
         outputFilePath = `${songDownloadPath}//${title}(${getRandomInt(1000)}).mp3`;
     }
 
@@ -308,6 +333,52 @@ function getRandomInt(max) {
 }
 
 
+// Function getAllSongs()
+// returns array of all songs in songDownloadPath
+async function getAllSongs(query, callback) {
+    var songs = [];
+    //getsongData for each song with query in title, if query is null or length 0 , get all songs
+    fs.readdir(songDownloadPath, (err, files) => {
+        if (err) {
+            console.log(err);
+        } else {
+            files.forEach((file) => {
+                if (file.endsWith(".mp3")) {
+                    try {
+                        var song = NodeID3.read(songDownloadPath + "\\" + file);
+                        if (query == null || query.length == 0) {
+                            songs.push({
+                                title: song.title,
+                                artist: song.artist,
+                                album: song.album,
+                                year: song.year,
+                                albumArt: song.image.imageBuffer.toString("base64"),
+                                fileLocation: songDownloadPath + "\\" + file,
+                            });
+                        } else {
+                            if (song.title.toLowerCase().includes(query.toLowerCase())) {
+                                songs.push({
+                                    title: song.title,
+                                    artist: song.artist,
+                                    album: song.album,
+                                    year: song.year,
+                                    albumArt: song.image.imageBuffer.toString("base64"),
+                                    fileLocation: songDownloadPath + "\\" + file,
+                                });
+                            }
+                        }
+                    } catch (error) {
+
+                    }
+                    
+                }
+            });
+            callback(songs);
+        }
+    });
+}
+
+
 var backendDownloader = settings.backendDownloader;
 var songDownloadPath = Path.resolve(__dirname, settings.songDownloadPath);
 var excludedWords = settings.excludedWords;
@@ -318,11 +389,24 @@ var experimentalSearchTerms = settings.experimentalSearchTerms;
 var experimentalTitler = settings.experimentalTitler;
 var experimentalTitlerRemover = settings.experimentalTitlerRemover;
 
+function reinitializeVariables() {
+    backendDownloader = settings.backendDownloader;
+    songDownloadPath = Path.resolve(__dirname, settings.songDownloadPath);
+    excludedWords = settings.excludedWords;
+    mp3gainDB = settings.mp3gainDB;
+    downloadArt = settings.downloadArt;
+    mp3gainNormalizeAudio = settings.mp3gainNormalizeAudio;
+    experimentalSearchTerms = settings.experimentalSearchTerms;
+    experimentalTitler = settings.experimentalTitler;
+    experimentalTitlerRemover = settings.experimentalTitlerRemover;
+}
+
 function writeConfig(callback) {
     try {
         fs.writeFileSync("./config.json", JSON.stringify(settings, null, 4));
-        callback(1,null)
-    } catch(e) {
-        callback(e,null)
+        reinitializeVariables();
+        callback(1, null)
+    } catch (e) {
+        callback(e, null)
     }
 }

@@ -7,12 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="js/scripts.js"></script>
-    <% var query; %>
-    <% if (query) { %>
-    <title><%= query %> - YMUSICDL</title>
-    <% } else { %>
-    <title>YMUSICDL</title>
-    <% } %>
+    <title>Downloaded Songs - YMUSICDL</title>
 </head>
 
 <body>
@@ -55,30 +50,15 @@
     </div>
 
     <div class="sidebar">
+        <a class="backButton" href="/">Back To Downloader</a>
         <h1>YMusicDL</h1>
-        <input type="text" name="songName" id="songName" value="<%= query %>">
-        <button id="searchButton" onclick="searchSong(document.getElementById('songName').value)">Search</button>
+        <input type="text" name="songName" id="songName">
         <button id="settingsButton" onclick="openSettingsModal()">Settings</button>
-        <button id="modeButton" onclick="openSongEdit()">Edit Songs</button>
     </div>
-    <div class="songslist">
-        <% var results; %>
 
-        <% results.forEach(song => { %>
-        <div class="songResult">
-
-            <button class="downloadbutton" id="<%= song.url %>"
-                onclick="downloadSong(this,`<%= song.title %>`,`<%= song.url %>`)">DOWNLOAD</button>
-            <div class="square-container">
-                <img onclick="openLink('<%= song.url %>')" src="<%= song.albumArt %>" alt="Album Art" class="songTitle square-image">
-            </div>
-            <span class="songTitle"><%= song.title %></span>
-            <span> - </span>
-            <span class="songArtist"><%= song.artist.replace(" - Topic","") %></span><br>
-            <span class="songYear"><%= song.year %></span>
-        </div>
-        <% }) %>
+    <div id="songsList" class="songslist">
     </div>
+    <script src="/js/editor.js"></script>
 </body>
 
 </html>

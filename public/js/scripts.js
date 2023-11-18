@@ -11,7 +11,9 @@ window.addEventListener("load", (event) => {
         });
 });
 
-
+function openSongEdit() {
+    window.location.href = "/songs";
+}
 
 function openLink(url) {
     socket.emit("openLink",url);
@@ -99,6 +101,7 @@ function showModal(Song, fileLocation) {
                 fileLocation: fileLocation,
             };
         }
+        liveUpdateEdit(saveSong);
         socket.emit("saveSongData", saveSong);
         closeModal();
     };
