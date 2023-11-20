@@ -57,6 +57,9 @@ socket.on("DownloadComplete", (data) => {
             showModal(songData, info.fileLocation);
         });
     };
+    
+    var fileName = info.fileLocation.split("\\").pop().split("/").pop();
+    showInfo("Downloaded " + fileName + " successfully","#1db954")
 
     mainDiv.prepend(newEditElement);
 });

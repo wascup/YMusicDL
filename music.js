@@ -139,6 +139,17 @@ io.on("connect", (socket) => {
         require("child_process").exec(command)
     });
 
+    socket.on("openFolder", (Location) => {
+        var OS = process.platform;
+        var realSongPath = Path.resolve(__dirname, settings.songDownloadPath);
+        if (OS == 'win32') {
+            var command = "explorer \"" + realSongPath + "\"";
+        } else {
+            var command = "xdg-open \"" + realSongPath + "\"";
+        }
+        require("child_process").exec(command)
+    });
+
 
     socket.on("getSongs", (query) => {
         getAllSongs(query,(songs) => {

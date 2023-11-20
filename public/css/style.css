@@ -71,7 +71,7 @@ body {
 .sidebar #settingsButton:hover {
     background-color: #085895;
 }
-.sidebar #modeButton {
+.sidebar .modeButton {
     position: absolute;
     bottom: 50px;
     left: 10%;
@@ -86,7 +86,7 @@ body {
     margin-top: .5em;
 }
 
-.sidebar #modeButton:hover {
+.sidebar .modeButton:hover {
     background-color: #085895;
 }
 

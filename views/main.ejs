@@ -59,7 +59,7 @@
         <input type="text" name="songName" id="songName" value="<%= query %>">
         <button id="searchButton" onclick="searchSong(document.getElementById('songName').value)">Search</button>
         <button id="settingsButton" onclick="openSettingsModal()">Settings</button>
-        <button id="modeButton" onclick="openSongEdit()">Edit Songs</button>
+        <button id="modeButton" class="modeButton" onclick="openSongEdit()">Edit Songs</button>
     </div>
     <div class="songslist">
         <% var results; %>

@@ -28,6 +28,10 @@ function openSong(fileLoc) {
     socket.emit("openSong", fileLoc);
 }
 
+function openFolder(fileLoc) {
+    socket.emit("openFolder", fileLoc);
+}
+
 function addSong(song) {
     var songDiv = document.createElement("div");
     var thumbDiv = document.createElement("div");
