@@ -168,12 +168,27 @@ io.on("connect", (socket) => {
 
 function searchYoutube(query, callback) {
     var searchTerms = query;
-    if (experimentalSearchTerms) {
-        searchTerms += ' "topic"'
+    if(!searchTerms.includes(".com")) {
+        if (experimentalSearchTerms) {
+            searchTerms += ' "topic"'
+        }
     }
 
     ytsearch(searchTerms, (err, results) => {
         var trueResults = [];
+        if(searchTerms.includes(".com")) {
+            var song = {
+                albumArt: results.videos[0].thumbnail,
+                title: results.videos[0].title,
+                artist: results.videos[0].author.name,
+                url: results.videos[0].url,
+                year: results.videos[0].year,
+            };
+            trueResults.push(song);
+            callback(trueResults);
+            return;
+        }
+
         if (err) {
             console.log(err);
         } else {
