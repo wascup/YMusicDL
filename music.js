@@ -332,6 +332,7 @@ async function getSongData(fileLocation) {
         album: song.album,
         year: song.year,
         albumArt: song.image.imageBuffer.toString("base64"),
+        fileLocation: fileLocation,
     };
 
     return songData;
@@ -358,51 +359,44 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-
-// Function getAllSongs()
-// returns array of all songs in songDownloadPath
 async function getAllSongs(query, callback) {
+    var query = query || "";
     var songs = [];
-    //getsongData for each song with query in title, if query is null or length 0 , get all songs
-    fs.readdir(songDownloadPath, (err, files) => {
+    var realPath = Path.resolve(__dirname, settings.songDownloadPath) + "/";
+    fs.readdir(realPath, (err, files) => {
         if (err) {
             console.log(err);
         } else {
-            files.forEach((file) => {
-                if (file.endsWith(".mp3")) {
-                    try {
-                        var song = NodeID3.read(songDownloadPath + "\\" + file);
-                        if (query == null || query.length == 0) {
-                            songs.push({
-                                title: song.title,
-                                artist: song.artist,
-                                album: song.album,
-                                year: getSongYear(song),
-                                albumArt: song.image.imageBuffer.toString("base64"),
-                                fileLocation: songDownloadPath + "\\" + file,
-                            });
-                        } else {
-                            if (song.title.toLowerCase().includes(query.toLowerCase())) {
-                                songs.push({
-                                    title: song.title,
-                                    artist: song.artist,
-                                    album: song.album,
-                                    year: getSongYear(song),
-                                    albumArt: song.image.imageBuffer.toString("base64"),
-                                    fileLocation: songDownloadPath + "\\" + file,
-                                });
-                            }
-                        }
-                    } catch (error) {
 
-                    }
-                    
-                }
+            files = files.filter((file) => {
+                return file.includes(".mp3");
             });
-            callback(songs);
+            
+            if (query != "") {
+                files = files.filter((file) => {
+                    var fileName = file.split(".mp3")[0].toLowerCase();
+                    return fileName.includes(query.toLowerCase());
+                });
+            }
+
+            files.forEach((file) => {
+                var song = NodeID3.read(realPath + file);
+                var songData = {
+                    title: song.title,
+                    artist: song.artist,
+                    album: song.album,
+                    year: getSongYear(song),
+                    albumArt: song.image.imageBuffer.toString("base64"),
+                    fileLocation: realPath + file,
+                };
+                songs.push(songData);
+            });
+            
         }
+        callback(songs);
     });
 }
+
 
 
 function getSongYear(song) {
