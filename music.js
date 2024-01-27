@@ -134,7 +134,7 @@ io.on("connect", (socket) => {
         if (OS == 'win32') {
             var command = "\"" + Location + "\"";
         } else {
-            var command = "xdg-open \"" + link + "\"";
+            var command = "xdg-open \"" + Location + "\"";
         }
         require("child_process").exec(command)
     });
@@ -371,7 +371,7 @@ async function getAllSongs(query, callback) {
             files = files.filter((file) => {
                 return file.includes(".mp3");
             });
-            
+
             if (query != "") {
                 files = files.filter((file) => {
                     var fileName = file.split(".mp3")[0].toLowerCase();
